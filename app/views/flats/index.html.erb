@@ -1,0 +1,73 @@
+<div class="container py-4">
+  <div class="row mb-4">
+    <div class="col">
+      <h1 class="fw-bold mb-1">All our Flats</h1>
+      <% if @query.present? %>
+        <p class="text-muted mb-0">
+          You searched for <strong><%= @query %></strong>.
+          We found <%= pluralize(@flats.size, "flat") %> out of <%= @total_count %> on our website.
+          <%= link_to "Clear search", flats_path, class: "ms-2 text-decoration-none" %>
+        </p>
+      <% else %>
+        <p class="text-muted mb-0">
+          All <%= pluralize(@flats.size, "flat") %> available.
+        </p>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @flats.any? %>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <% @flats.each do |flat| %>
+        <div class="col">
+          <div class="flat-card h-100 d-flex flex-column shadow-sm">
+            <div class="flat-card-image overflow-hidden">
+              <%= image_tag flat_picture_url(flat), alt: flat.name, class: "w-100 h-100 object-fit-cover" %>
+            </div>
+
+            <div class="p-3 bg-light flex-grow-1 d-flex flex-column">
+              <h2 class="h5 fw-bold mb-1"><%= flat.name %></h2>
+              <p class="text-muted small mb-3"><%= flat.address %></p>
+
+              <div class="d-flex align-items-center gap-3 mt-auto text-dark">
+                <span>
+                  <i class="fa-solid fa-user-group me-1 text-secondary"></i>
+                  <%= flat.number_of_guests %>
+                </span>
+                <span>
+                  <i class="fa-solid fa-euro-sign me-1 text-secondary"></i>
+                  <%= flat.price_per_night %>
+                </span>
+              </div>
+            </div>
+
+            <div class="flat-card-actions px-3 py-2 d-flex align-items-center gap-3 small fw-semibold">
+              <%= link_to "More info", flat_path(flat), class: "text-primary text-decoration-none" %>
+              <%= link_to "Edit", edit_flat_path(flat), class: "text-warning text-decoration-none" %>
+              <%= link_to "Remove",
+                          flat_path(flat),
+                          data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove this flat?" },
+                          class: "text-danger text-decoration-none ms-auto" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="flat-info-card p-5 text-center">
+      <h2 class="h4 fw-bold mb-2">No flats found</h2>
+      <p class="text-muted mb-3">
+        <% if @query.present? %>
+          Try a different search term or clear your filter to browse all listings.
+        <% else %>
+          Be the first to list a flat on Simple Airbnb.
+        <% end %>
+      </p>
+      <% if @query.present? %>
+        <%= link_to "Show all flats", flats_path, class: "btn btn-outline-primary me-2" %>
+      <% end %>
+      <%= link_to "Add Flat", new_flat_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
+

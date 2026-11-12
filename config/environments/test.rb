@@ -48,3 +48,12 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
 end
+
+# Compatibility shim for external specs using legacy RSpec `config.fixture_path=` on rspec-rails 8+.
+if defined?(RSpec::Core::Configuration) && !RSpec::Core::Configuration.method_defined?(:fixture_path=)
+  RSpec::Core::Configuration.class_eval do
+    def fixture_path=(path)
+      self.fixture_paths = [ path ] if respond_to?(:fixture_paths=)
+    end
+  end
+end

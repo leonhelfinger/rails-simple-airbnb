@@ -1,0 +1,53 @@
+<%= form_with model: flat, local: true do |f| %>
+  <% if flat.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <h2 class="h6 fw-bold mb-2">
+        <%= pluralize(flat.errors.count, "error") %> prevented this flat from being saved:
+      </h2>
+      <ul class="mb-0 ps-3">
+        <% flat.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :name, class: "form-label fw-semibold" %>
+    <%= f.text_field :name, class: "form-control", placeholder: "Light & Spacious Garden Flat London" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :address, class: "form-label fw-semibold" %>
+    <%= f.text_field :address, class: "form-control", placeholder: "10 Clifton Gardens London W9 1DT" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :picture_url, "Picture URL", class: "form-label fw-semibold" %>
+    <%= f.url_field :picture_url, class: "form-control", placeholder: "https://images.unsplash.com/..." %>
+    <div class="form-text">Optional. Leave blank to use a default photo.</div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :description, class: "form-label fw-semibold" %>
+    <%= f.text_area :description, rows: 4, class: "form-control", placeholder: "Describe the flat, rooms, and surroundings..." %>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <%= f.label :price_per_night, "Price per night (€)", class: "form-label fw-semibold" %>
+      <%= f.number_field :price_per_night, min: 0, step: 1, class: "form-control" %>
+    </div>
+
+    <div class="col-md-6">
+      <%= f.label :number_of_guests, "Number of guests", class: "form-label fw-semibold" %>
+      <%= f.number_field :number_of_guests, min: 1, step: 1, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= f.submit class: "btn btn-primary px-4" %>
+    <%= link_to "Cancel", flat.persisted? ? flat_path(flat) : flats_path, class: "btn btn-outline-secondary" %>
+  </div>
+<% end %>
+
